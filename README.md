@@ -13,7 +13,7 @@ The program supports three instructions:
 ## Build
 
 ```bash
-cargo build-sbf --features bpf-entrypoint
+./scripts/build-sbf.sh
 ```
 
 ## Test
@@ -27,5 +27,31 @@ cargo test
 LiteSVM integration tests after building the program ELF:
 
 ```bash
-cargo test --test escrow_litesvm -- --ignored
+./scripts/test-litesvm.sh
+```
+
+## Toolchain
+
+This repo is pinned to a newer Agave SBF toolchain than the globally installed
+`cargo build-sbf` on this machine.
+
+By default the wrapper scripts expect:
+
+```bash
+/tmp/agave-3.1.5/active_release/bin
+```
+
+Override that path with `AGAVE_SBF_BIN` if your Agave install lives elsewhere:
+
+```bash
+AGAVE_SBF_BIN=/path/to/agave/bin ./scripts/build-sbf.sh
+```
+
+If you use `just`, the same workflow is available via:
+
+```bash
+just build
+just test
+just test-litesvm
+just toolchain-info
 ```

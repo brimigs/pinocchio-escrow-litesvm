@@ -4,7 +4,7 @@ use crate::error::EscrowError;
 
 pub const ESCROW_SEED_PREFIX: &[u8] = b"escrow";
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct EscrowState {
     pub bump: u8,
     pub seed: u64,

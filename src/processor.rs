@@ -35,7 +35,7 @@ fn process_make(
     accounts: &mut [AccountView],
     args: MakeArgs,
 ) -> ProgramResult {
-    let [maker, maker_deposit, escrow, vault, mint_a, mint_b, token_program, system_program] =
+    let [maker, maker_deposit, escrow, vault, mint_a, mint_b, token_program, system_program, ..] =
         accounts
     else {
         return Err(ProgramError::NotEnoughAccountKeys);
@@ -49,8 +49,8 @@ fn process_make(
     assert_program(token_program, &pinocchio_token::ID)?;
     assert_program(system_program, &pinocchio_system::ID)?;
 
-    let mint_a_address = *mint_a.address();
-    let mint_b_address = *mint_b.address();
+    let mint_a_address = mint_a.address().clone();
+    let mint_b_address = mint_b.address().clone();
 
     Mint::from_account_view(mint_a)?;
     Mint::from_account_view(mint_b)?;
@@ -71,7 +71,13 @@ fn process_make(
     }
 
     let rent = Rent::get()?;
-    let lamports = rent.try_minimum_balance(EscrowState::LEN)?.max(1);
+    // Pinocchio's current Rent helper returns the base rent figure; the runtime
+    // rent-exempt threshold is effectively 2x that amount.
+    let lamports = rent
+        .try_minimum_balance(EscrowState::LEN)?
+        .checked_mul(2)
+        .ok_or(EscrowError::ArithmeticOverflow)?
+        .max(1);
     with_escrow_signer(maker.address(), args.seed, bump, |signers| {
         CreateAccount {
             from: maker,
@@ -86,8 +92,8 @@ fn process_make(
     let state = EscrowState::new(
         bump,
         args.seed,
-        *maker.address(),
-        mint_a_address,
+        maker.address().clone(),
+        mint_a_address.clone(),
         mint_b_address,
         args.offered_amount,
         args.expected_amount,

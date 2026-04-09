@@ -20,6 +20,7 @@ use spl_token_interface::{
 
 const PROGRAM_ID: Pubkey = pubkey!("7h1hJkP8i1H2Q7xPkD8STGvN6dEyxwCxPj3YfJ8p6r7T");
 const SYSTEM_PROGRAM_ID: Pubkey = pubkey!("11111111111111111111111111111111");
+const ASSOCIATED_TOKEN_PROGRAM_ID: Pubkey = pubkey!("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
 
 #[test]
 #[ignore = "requires `cargo build-sbf --features bpf-entrypoint` first"]
@@ -273,6 +274,7 @@ fn make_instruction(
             AccountMeta::new_readonly(*mint_b, false),
             AccountMeta::new_readonly(TOKEN_PROGRAM_ID, false),
             AccountMeta::new_readonly(SYSTEM_PROGRAM_ID, false),
+            AccountMeta::new_readonly(ASSOCIATED_TOKEN_PROGRAM_ID, false),
         ],
         data,
     }
