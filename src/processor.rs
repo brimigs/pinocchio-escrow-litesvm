@@ -54,7 +54,12 @@ fn process_make(
 
     Mint::from_account_view(mint_a)?;
     Mint::from_account_view(mint_b)?;
-    assert_token_account(maker_deposit, maker.address(), &mint_a_address, args.offered_amount)?;
+    assert_token_account(
+        maker_deposit,
+        maker.address(),
+        &mint_a_address,
+        args.offered_amount,
+    )?;
 
     let seed_bytes = args.seed.to_le_bytes();
     let (expected_escrow, bump) = Address::find_program_address(
@@ -150,7 +155,12 @@ fn process_take(program_id: &Address, accounts: &mut [AccountView]) -> ProgramRe
 
     Mint::from_account_view(mint_a)?;
     Mint::from_account_view(mint_b)?;
-    assert_token_account(taker_send, taker.address(), &state.mint_b, state.expected_amount)?;
+    assert_token_account(
+        taker_send,
+        taker.address(),
+        &state.mint_b,
+        state.expected_amount,
+    )?;
     assert_token_account(taker_receive, taker.address(), &state.mint_a, 0)?;
     assert_token_account(maker_receive, maker.address(), &state.mint_b, 0)?;
 
@@ -296,7 +306,10 @@ fn associated_token_address(wallet: &Address, mint: &Address) -> Address {
     .0
 }
 
-fn close_program_account(account: &mut AccountView, destination: &mut AccountView) -> ProgramResult {
+fn close_program_account(
+    account: &mut AccountView,
+    destination: &mut AccountView,
+) -> ProgramResult {
     let destination_lamports = destination
         .lamports()
         .checked_add(account.lamports())

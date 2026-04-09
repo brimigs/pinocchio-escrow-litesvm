@@ -131,13 +131,7 @@ fn make_and_cancel_flow() {
         &mut svm,
         &maker,
         &[&maker],
-        cancel_instruction(
-            &maker.pubkey(),
-            &maker_a,
-            &escrow,
-            &vault,
-            &mint_a.pubkey(),
-        ),
+        cancel_instruction(&maker.pubkey(), &maker_a, &escrow, &vault, &mint_a.pubkey()),
     );
 
     assert_eq!(token_balance(&svm, &maker_a), 100);
@@ -178,7 +172,8 @@ fn send_ix(svm: &mut LiteSVM, payer: &Keypair, signers: &[&Keypair], instruction
         svm.latest_blockhash(),
     );
 
-    svm.send_transaction(tx).expect("transaction should succeed");
+    svm.send_transaction(tx)
+        .expect("transaction should succeed");
 }
 
 fn create_mint(svm: &mut LiteSVM, mint: &Keypair, mint_authority: &Pubkey, decimals: u8) {
@@ -238,12 +233,17 @@ fn create_token_account(svm: &mut LiteSVM, owner: &Pubkey, mint: &Pubkey, amount
 }
 
 fn token_balance(svm: &LiteSVM, token_account: &Pubkey) -> u64 {
-    let account = svm.get_account(token_account).expect("token account should exist");
+    let account = svm
+        .get_account(token_account)
+        .expect("token account should exist");
     u64::from_le_bytes(account.data[64..72].try_into().unwrap())
 }
 
 fn escrow_pda(maker: &Pubkey, seed: u64) -> (Pubkey, u8) {
-    Pubkey::find_program_address(&[b"escrow", maker.as_ref(), &seed.to_le_bytes()], &PROGRAM_ID)
+    Pubkey::find_program_address(
+        &[b"escrow", maker.as_ref(), &seed.to_le_bytes()],
+        &PROGRAM_ID,
+    )
 }
 
 fn make_instruction(
