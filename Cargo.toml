@@ -1,0 +1,29 @@
+[package]
+name = "pinocchio-escrow-litesvm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+default = []
+bpf-entrypoint = []
+
+[dependencies]
+pinocchio = { version = "0.11", features = ["cpi"] }
+pinocchio-associated-token-account = "0.4"
+pinocchio-system = "0.6"
+pinocchio-token = "0.6"
+
+[dev-dependencies]
+litesvm = "0.9.0"
+solana-program = "3.0.0"
+solana-sdk = "3.0.0"
+spl-associated-token-account = { version = "8.0.0", features = ["no-entrypoint"] }
+spl-token-interface = "2.0.0"
+
+[patch.crates-io]
+hashbrown = { path = "vendor/hashbrown" }
+indexmap = { path = "vendor/indexmap" }
+wincode = { path = "vendor/wincode" }
