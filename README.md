@@ -30,6 +30,34 @@ LiteSVM integration tests after building the program ELF:
 ./scripts/test-litesvm.sh
 ```
 
+## LiteSVM vs litesvm-utils
+
+This repo now includes both styles of LiteSVM integration test:
+
+- [tests/escrow_litesvm.rs](/Users/brimigs/code/pinocchio-escrow-litesvm/tests/escrow_litesvm.rs) uses raw `litesvm`
+- [tests/simplified-litesvm.rs](/Users/brimigs/code/pinocchio-escrow-litesvm/tests/simplified-litesvm.rs) uses `litesvm-utils`
+
+The raw `litesvm` test is lower level. It manually:
+
+- loads the program
+- creates and funds accounts
+- builds mint and token account state
+- constructs and signs transactions
+- reads account data directly for assertions
+
+The `litesvm-utils` test keeps the same escrow coverage, but replaces most of that boilerplate with helpers like:
+
+- `create_funded_account`
+- `create_token_mint`
+- `create_associated_token_account`
+- `mint_to`
+- `get_pda`
+- `send_instruction`
+- `assert_token_balance`
+- `assert_account_closed`
+
+Use the raw `litesvm` test when you want full control over account setup and runtime details. Use the `litesvm-utils` test when you want the same integration coverage with less ceremony and clearer intent.
+
 ## Toolchain
 
 This repo is pinned to a newer Agave SBF toolchain than the globally installed
