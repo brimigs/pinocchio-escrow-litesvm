@@ -34,8 +34,8 @@ LiteSVM integration tests after building the program ELF:
 
 This repo now includes both styles of LiteSVM integration test:
 
-- [tests/escrow_litesvm.rs](/Users/brimigs/code/pinocchio-escrow-litesvm/tests/escrow_litesvm.rs) uses raw `litesvm`
-- [tests/simplified-litesvm.rs](/Users/brimigs/code/pinocchio-escrow-litesvm/tests/simplified-litesvm.rs) uses `litesvm-utils`
+- [tests/escrow_litesvm.rs](/tests/escrow_litesvm.rs) uses raw `litesvm`
+- [tests/simplified-litesvm.rs](/tests/simplified-litesvm.rs) uses `litesvm-utils`
 
 The raw `litesvm` test is lower level. It manually:
 
